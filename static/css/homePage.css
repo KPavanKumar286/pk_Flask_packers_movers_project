@@ -1,0 +1,136 @@
+.home_image {
+    width: 100%;
+    height: 400px;
+}
+
+.service_heading, .process_heading{
+    margin: 26px;
+    text-align: center;
+}
+
+.services, .process{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 columns */
+    gap: 20px;
+    text-align: center;
+}
+
+.service-box i, .process-box i{
+    font-size: 50px;
+    color: #007bff;
+}
+
+.service-box h1, .process-box h1{
+    font-size: 20px;
+    margin-top: 10px;
+}
+
+/* .get_rough_count {
+    background-color: dimgray;
+} */
+
+* {
+  box-sizing: border-box;
+  font-family: "Segoe UI", Tahoma, sans-serif;
+}
+
+/* Main background */
+.get_rough_count {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  color: #fff;
+}
+
+/* Form container */
+.get_rough_count form {
+  width: 100%;
+  max-width: 900px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  padding: 40px;
+  border-radius: 15px;
+}
+
+/* Heading */
+.get_rough_count h1 {
+  font-size: 38px;
+  margin-bottom: 5px;
+}
+
+.get_rough_count p {
+  opacity: 0.85;
+  margin-bottom: 30px;
+}
+
+/* Grid layout */
+.get_rough_count_details {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+/* Input & Select styles */
+.get_rough_count_details input,
+.get_rough_count_details select {
+  width: 100%;
+  padding: 12px 15px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  font-size: 15px;
+}
+
+/* Placeholder color */
+.get_rough_count_details input::placeholder {
+  color: #777;
+}
+
+/* Select dropdown */
+.get_rough_count_details select {
+  background: #fff;
+  color: #333;
+  cursor: pointer;
+}
+
+/* Button container */
+.button {
+  margin-top: 30px;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+/* Submit button */
+.button input[type="submit"] {
+  background: #ff9800;
+  color: #fff;
+  border: none;
+  padding: 14px 50px;
+  font-size: 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.button input[type="submit"]:hover {
+  background: #e68900;
+  transform: translateY(-2px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .get_rough_count_details {
+    grid-template-columns: 1fr;
+  }
+
+  .get_rough_count form {
+    padding: 25px;
+  }
+
+  .get_rough_count h1 {
+    font-size: 28px;
+  }
+}

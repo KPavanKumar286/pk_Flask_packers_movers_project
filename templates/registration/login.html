@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Login</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}" >
+    </head>
+    <body>
+        <div id="login-page">
+            <div class="login">
+                <h1>Login Page</h1>
+
+
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages%}
+                            <p class="{{category}}">{{message}}</p>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith%}
+
+                <form class="form-login" method="POST" >
+                    <label for="email">E-mail</label>
+                    <div class="input-email">
+                        <i class="fas fa-envelope icon"></i>
+                        <input type="email" name="email" placeholder="Enter your e-mail" required>
+                    </div>
+
+                    <label for="password">Password</label>
+                    <div class="input-password">
+                        <i class="fas fa-lock icon"></i>
+                        <input type="password" name="password" placeholder="Enter your password" required>
+                    </div>
+                    
+                    <button type="submit"><i class="fas fa-door-open"></i> Sign in</button>
+                </form>
+                    <hr>
+                    <a class="register_button" href="{{url_for('registration', role_id=2)}}">REGISTER</a>
+                    
+            </div>
+                <div class="background">
+                </div>
+        </div>
+    </body>
+</html>

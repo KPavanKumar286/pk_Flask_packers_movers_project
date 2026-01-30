@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/homePage.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <title>Home Page</title>
+</head>
+<body>
+    {% include 'registration/navbar.html' %}
+    <img class="home_image" src="{{ url_for('static', filename='images/packers_and_movers_home_image.jfif' )}}" alt="Packers and Movers">
+
+    <div class="our_services">
+        <h1 class="service_heading">Our Services</h1>
+        <div class="services">
+            <div class="service-box">
+                <i class="fa-regular fa-calendar-days"></i>
+                <h1>Always Available</h1>
+                <P>
+                    Discover our comprehensive moving and packing services,
+                    tailored to your needs. With 24/7 availability, we ensure
+                    seamless relocations every time, providing peace of mind in just 30 words.
+                </P>
+            </div>
+            <div class="service-box">
+                <i class="fa-solid fa-cart-shopping"></i>
+                <h1>Best Offers</h1>
+                <P> 
+                    Explore our unbeatable deals, tailored to your moving needs,
+                    ensuring affordability without compromising quality.
+                </P>
+            </div>
+            <div class="service-box">
+                <i class="fa-solid fa-house"></i>
+                <h1>Residential Moves</h1>
+                <P>
+                    Trust us to handle your home relocation smoothly, ensuring
+                    every precious belonging arrives safely and on time to your new abode.    
+                </P>
+            </div>
+            <div class="service-box">
+                <i class="fas fa-truck"></i>
+                <h1>Corporate Relocation</h1>
+                <P>
+                    Experience seamless transitions for your business with our
+                    expert corporate relocation services, minimizing downtime 
+                    and maximizing efficiency.    
+                </P>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div class="get_rough_count">
+
+        <form method="post">
+            <h1>Get a Rough Count</h1><br>
+            <p>Get a rough and book your service today!</p><br>
+
+            <div class="get_rough_count_details">
+                <div class="input_box">
+                    <input type="text" id="your_name" name="your_name" placeholder="Your name">
+                </div>
+                <div class="input_box">
+                    <input type="text" id="email" name="email" placeholder="Email Address" >
+                </div>
+                <div class="input_xox">
+                    <input type="text" id="phone_number" name="phone_number" placeholder="Your Number" >
+                </div>
+                <div>
+                    <select name="from_address_id">
+                        <option value="">From Address </option>
+
+                        {% for loc in locations %}
+                        <option value="{{ loc.location_id }}">
+                            {{ loc.location_name }}
+                        </option>
+                        {% endfor%}
+
+                    </select>
+                </div>
+
+                <div>
+                    <select name="to_address_id">
+                        <option value="">To Address</option>
+
+                        {% for loc in locations %}
+                        <option value="{{ loc.location_id }}" >
+                            {{ loc.location_name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div>
+                    <select name="items_id" id="items">
+                        <option value="">Item Size</option>
+                        {% for item in items %}
+                            <option value="{{ item.id }}">
+                                {{ item.estimate_size }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+               
+            </div>
+            <div class="button">
+                <input type="submit" value="checkNow">
+            </div>
+            
+
+            {% if from_address.location_name and to_address.location_name and selected_item.estimate_size and (from_address.location_name != to_address.location_name)%}
+            <p> from <strong>{{from_address.location_name}}</strong> to <strong>{{to_address.location_name}}</strong>, with an item size of <strong>{{selected_item.estimate_size}}</strong>: <br>
+                So Your Estimation cost <strong>{{estimated_cost}}</strong>.
+            </p>
+            {% else %}
+            <p>Please select valid locations and item size to get an estimate.</p>
+            {% endif %}
+
+
+
+        </form>
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="our_process">
+        <h1 class="process_heading">Our Process</h1>
+        <div class="process">
+            <div class="process-box">
+                <i class="fa-sharp fa-solid fa-book"></i>
+                <h1>Book Your Order</h1>
+            </div>
+            <div class="process-box">
+                <i class="fa-sharp fa-solid fa-box-archive"></i>
+                <h1>Pack Your Things</h1>
+            </div>
+            <div class="process-box">
+                <i class="fas fa-truck"></i>
+                <h1>Move Your Order</h1>
+            </div>
+            <div class="process-box">
+                <i class="fa-solid fa-cart-shopping"></i>
+                <h1>Deliver Your Order</h1>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-light mt-5">
+        <div class="container py-4">
+            <div class="row">
+
+                <div class="col-md-4" style="text-align: center;">
+                    <h5>About the company</h5>
+                    <p>
+                        We specialize in making moving stress-free. With years
+                        of expertize, our dedicated team ensures every move
+                        is seamless and personalized to your needs. From 
+                        packing to transportation, we handle it all with care and
+                        precision. Trust to make your move a breeze. 
+                    </p>
+                </div>
+
+                <div class="col-md-4" style="text-align: center;">
+                    <h5>Packers and Movers</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="/" class="text-light text-decoration-none">Home</a></li>
+                        <li><a href="/about" class="text-light text-decoration-none">Book Now</a></li>
+                        <li><a href="/services" class="text-light text-decoration-none">Profile</a></li>
+                        <li><a href="/contact" class="text-light text-decoration-none">Dashboard</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-md-4" style="text-align: center;">
+                    <h5>Contact</h5>
+                    <p>
+                        📍 Hyderabad, India<br>
+                        📞 +91 98765 43210<br>
+                        ✉️ packersAndMovers@myapp.com
+                    </p>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="text-center bg-secondary py-2">
+            © 2026 Packers and Movers. All rights reserved.
+        </div>
+    </footer>
+
+</body>
+</html>

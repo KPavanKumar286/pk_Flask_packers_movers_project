@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="{{url_for('static', filename='css/dashboard.css')}}">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<body>
+
+    {% include 'registration/navbar.html' %}
+
+    <div class="dashboard-container">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <ul id="sidebar-menu">
+                <li class="active" data-target="content">
+                    <i class="fa-solid fa-chart-line"></i> Dashboard
+                </li>
+
+                {% if session.role_id == 1 %}
+                <li data-target="dash_item_size">
+                    <i class="fa-solid fa-ruler-combined"></i> Item Size
+                </li>
+                <li data-target="dash_location">
+                    <i class="fa-solid fa-location-dot"></i> Locations
+                </li>
+                <li data-target="dash_distance">
+                    <i class="fa-solid fa-route"></i> Distance
+                </li>
+                <li data-target="dash_bookings">
+                    <i class="fa-solid fa-file-lines"></i> Bookings
+                </li>
+                <li data-target="dash_packers">
+                    <i class="fa-solid fa-box"></i> Packers
+                </li>
+                <li data-target="dash_movers">
+                    <i class="fa-solid fa-truck"></i> Movers
+                </li>
+                {% elif session.role_id == 2%}
+                <li data-target="dash_bookings">
+                    <i class="fa-solid fa-file-lines"></i> Your Bookings
+                </li>
+                {% elif session.role_id == 3 or session.role_id == 4 %}
+                <li data-target="dash_bookings">
+                    <i class="fa-solid fa-file-lines"></i> Assigned Bookings
+                </li>
+                {% endif %}
+            </ul>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="content">
+
+            <!-- DASHBOARD DEFAULT -->
+            <section id="content" class="tab-content">
+                <div class="content">
+                    <h1>What We Provide</h1>
+                    <ul class="grid">
+                        <li class="grid-item">
+                            <i class="fa-solid fa-ruler-combined icon-style"></i>
+                            Item Size
+                        </li>
+                        <li class="grid-item">
+                            <i class="fa-solid fa-location-dot"></i>
+                            Locations
+                        </li>
+                        <li class="grid-item">
+                            <i class="fa-solid fa-route"></i>
+                            Distance
+                        </li>
+                        <li class="grid-item">
+                            <i class="fa-solid fa-file-lines"></i>
+                            Bookings
+                        </li>
+                        <li class="grid-item">
+                            <i class="fa-solid fa-box"></i>
+                            Packers
+                        </li>
+                        <li class="grid-item">
+                            <i class="fa-solid fa-truck"></i> 
+                            Movers
+                        </li>	
+                    </ul>
+                </div>
+            </section>
+
+            <!-- ITEM SIZE -->
+            <section id="dash_item_size" class="tab-content" style="display:none;">
+                <div>
+                    <h1>Item Size</h1>
+                    <button class="btn btn-primary" style="margin-bottom: 20px;" data-bs-toggle="modal" data-bs-target="#addItemModal">
+                        Add Item
+                    </button>
+                </div>
+                <table class="display table table-bordered" id="itemsTable" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Item Name</th>
+                            <th>Item Description</th>
+                            <th>Item Price</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for item in items %}
+                        <tr id="itemRow{{item.item_id}}">
+                            <td class="item-name">{{ item.item_name }}</td>
+                            <td class="item-description">{{ item.item_description }}</td>
+                            <td class="item-price">{{ "%.2f"|format(item.item_price) }}</td>
+                            <td> 
+                                <button class="btn btn-info btn-sm view-edit-item"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#viewEditItemModal"
+                                    data-id="{{ item.item_id }}"
+                                    data-name="{{ item.item_name }}"
+                                    data-description="{{ item.item_description }}"
+                                    data-price="{{ item.item_price }}">
+                                    View/Edit
+                                </button>
+                                <button class="btn btn-danger btn-sm delete-item"
+                                    data-id="{{ item.item_id }}">
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </section>
+
+
+            <!-- Location -->
+            <section id="dash_location" class="tab-content" style="display:none;">
+                <div>
+                    <h1>Locations</h1>
+                    <button class="btn btn-primary" style="margin-bottom: 20px;" data-bs-toggle="modal" data-bs-target="#addLocationModal">
+                        Add Location
+                    </button>
+                </div>
+                <table class="display" id="locationsTable" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Location Name</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for location in locations %}
+                        <tr id="locationRow{{location.location_id}}">
+                            <td class="location-name">{{ location.location_name }}</td>
+                            <td>
+                                <button class="btn btn-info btn-sm view-edit-location"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#viewEditLocationModal"
+                                    data-location_id="{{ location.location_id }}"
+                                    data-location_name="{{ location.location_name }}" >
+                                    View/Edit
+                                </button>
+                                <button class="btn btn-danger btn-sm delete-location"
+                                    data-id="{{ location.location_id }}">
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Distance -->
+            <section id="dash_distance" class="tab-content" style="display:none;">
+                <h1>Distance</h1>
+                <table class="display" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>From Location</th>
+                            <th>To Location</th>
+                            <th>Distance in KM</th>
+                            <th>Distance Price</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for distance in distance %}
+                            <tr id="distanceRow{{distance.distance_id}}">
+                                <td class="from_location">{{ distance.from_location }}</td>
+                                <td class="to_location">{{ distance.to_location }}</td>
+                                <td class="distance_km">{{ distance.distance_km }}</td>
+                                <td class="distance_price">{{ distance.distance_price}}</td>
+                                <td>
+                                    <button class="btn btn-info btn-sm view-edit-distance"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#viewEditDistanceModal"
+                                        data-distance_id="{{ distance.distance_id }}"
+                                        data-from_location="{{ distance.from_location }}"
+                                        data-to_location="{{ distance.to_location }}"
+                                        data-distance_km="{{ distance.distance_km }}"
+                                        data-distance_price = "{{ distance.distance_price }}" >
+                                        View/Edit
+                                    </button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Bookings -->
+             <section id="dash_bookings" class="tab-content" style="display:none;">
+                <h1>Bookings</h1>
+                <table class="display" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>User Name</th>
+                            <th>Phone Number</th>
+                            <th>Booking Date</th>
+                            <th>From Location</th>
+                            <th>To Location</th>
+                            <th>Booking Description</th>
+                            <th>Cost</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for booking in bookings %}
+                        <tr>
+                            <td>{{ booking.first_name }}</td>
+                            <td>{{ booking.phone_number }}</td>
+                            <td>{{ booking.booking_date.strftime('%Y-%m-%d') }}</td>
+                            <td>{{ booking.from_location}}</td>
+                            <td>{{ booking.to_location }}</td>
+                            <td>{{ booking.booking_description }}</td>
+                            <td>{{ booking.booking_cost }}</td>
+                            <td>{{ booking.booking_status}}</td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="3">No Bookings found</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Packers -->
+            <section id="dash_packers" class="tab-content" style="display:none;">
+                <h1>Packers</h1>
+                <a href="{{ url_for('registration', role_id=3) }}" class="btn btn-primary" style="margin-bottom: 20px;">
+                    Registration as Packer
+                </a>
+
+                <table class="display" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Packer Name</th>
+                            <th>Packer Email</th>
+                            <th>Packer Phone Number</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for packer in packers %}
+                        <tr>
+                            <td>{{ packer.packer_name }}</td>
+                            <td>{{ packer.packer_email }}</td>
+                            <td>{{ packer.packer_phone_number }}</td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="3">No items found</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Movers -->
+            <section id="dash_movers" class="tab-content" style="display:none;">
+                <h1>Movers</h1>
+                <a href="{{ url_for('registration', role_id=4) }}" class="btn btn-primary" style="margin-bottom: 20px;">
+                    Registration as Mover
+                </a>
+                <table class="display" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Mover Name</th>
+                            <th>Mover Email</th>
+                            <th>Mover Phone Number</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for mover in movers %}
+                        <tr>
+                            <td>{{ mover.movers_name }}</td>
+                            <td>{{ mover.movers_email }}</td>
+                            <td>{{ mover.movers_phone_number }}</td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="3">No items found</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Item Model Box -->
+    <div class="modal fade" id="viewEditItemModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">View / Edit Item</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <form id="viewEditItemForm">
+                        <input type="hidden" id="editItemId" name="item_id">
+
+                        <div class="mb-3">
+                            <label for="editItemName" class="form-label">Item Name</label>
+                            <input type="text" class="form-control" id="editItemName" name="item_name">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="editItemDescription" class="form-label">Description</label>
+                            <input type="text" class="form-control" id="editItemDescription" name="item_description">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="editItemPrice" class="form-label">Price</label>
+                            <input type="number" class="form-control" id="editItemPrice" name="item_price" >
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Update</button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Location Model Box -->
+    <div class="modal fade" id="viewEditLocationModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">View / Edit Location</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="viewEditLocationForm">
+                        <input type="hidden" id="editLocationId" name="location_id">
+                        <div class="mb-3">
+                            <label for="editLocationName" class="form-label">Location Name</label>
+                            <input type="text" class="form-control" id="editLocationName" name="location_name">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Update</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Distance Model Box -->
+    <div class="modal fade" id="viewEditDistanceModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">View / Edit Distance</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="viewEditDistanceForm">
+                        <input type="hidden" id="editDistanceId" name="distance_id">
+                        <div class="mb-3">
+                            <label for="editFromLocation" class="form-label">From Location</label>
+                            <input type="text" class="form-control" id="editFromLocation" name="from_location">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editToLocation" class="form-label">To Location</label>
+                            <input type="text" class="form-control" id="editToLocation" name="to_location">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editDistanceInKm" class="form-label">Distance in KM</label>
+                            <input type="text" class="form-control" id="editDistanceInKm" name="distance_in_km">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editDistancePrice" class="form-label">Distance Price</label>
+                            <input type="text" class="form-control" id="editDistancePrice" name="distance_price">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Update</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    <!-- Add item -->
+    <div class="modal fade" id="addItemModal" tabindex="-1">
+        <div class="modal-dialog">
+            <form class="modal-content" id="addItemForm">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Item</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label>Item Name</label>
+                        <input type="text" name="item_name" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Description</label>
+                        <textarea name="item_description" class="form-control"></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Price</label>
+                        <input type="number" step="0.01" name="item_price" class="form-control" required>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Submit</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+      <!-- Add Location -->
+    <div class="modal fade" id="addLocationModal" tabindex="-1">
+        <div class="modal-dialog">
+            <form class="modal-content" id="addLocationForm">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Location</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label>Location Name</label>
+                        <input type="text" name="location_name" class="form-control" required>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Submit</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="{{ url_for('static', filename='js/dashboard.js')}}"></script>
+</body>
+</html>

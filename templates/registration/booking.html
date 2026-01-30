@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="{{url_for('static', filename='css/booking.css')}}">
+    </head>
+    <body>
+        {% include 'registration/navbar.html' %}
+
+        <form method="POST" action="{{url_for('create_booking')}}">
+            <div class="wrapper">
+                <div class="title">
+                    BOOKING
+                </div>
+                <div class="form">
+                <div class="inputfield">
+                    <label>User Name</label>
+                    <h5>{{session.user_name}}</h5>
+                </div>  
+                <div class="inputfield">
+                    <label>Phone Number</label>
+                    <h5>{{session.phone_number}}</h5>
+                </div> 
+                <div class="inputfield">
+                    <label>From Location</label>
+                    <select name="from_address_id" class="custom_select">
+                        <option value="">From Address </option>
+
+                        {% for loc in locations %}
+                        <option value="{{ loc.location_id }}">
+                            {{ loc.location_name }}
+                        </option>
+                        {% endfor%}
+
+                    </select>
+                </div>
+                <div class="inputfield">
+                    <label>From Location</label>
+                    <select name="to_address_id" class="custom_select">
+                        <option value="">To Address</option>
+
+                        {% for loc in locations %}
+                        <option value="{{ loc.location_id }}" >
+                            {{ loc.location_name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+
+
+                <div id="item-container">
+                    <label>Items</label>
+                    <div class="item-row">
+                        <select name="product_id[]" class="item_select" required>
+                            <option value="">Select Item</option>
+                            {% for item_size in item_sizes %}
+                                <option value="{{ item_size.item_id }}">{{ item_size.item_name }}</option>
+                            {% endfor %}
+                        </select>
+
+                        <input type="number" class="item_select" name="quantity[]" min="1" placeholder="Qty" required>
+                    </div>
+                </div>
+                <br>
+                <button type="button" class="add_more" onclick="addItem()">Add More</button>
+                <br><br>
+                <div class="inputfield">
+                    <input type="submit" value="Booking" class="btn">
+                </div>
+
+
+
+                    
+            
+                </div>
+            </div>
+ 
+ 
+ 
+        </form>
+    
+    <script>
+    function addItem() {
+        const container = document.getElementById('item-container');
+        const row = document.querySelector('.item-row').cloneNode(true);
+
+        row.querySelector('select').value = "";
+        row.querySelector('input').value = "";
+
+        container.appendChild(row);
+    }
+    </script>
+
+    </body>
+</html>

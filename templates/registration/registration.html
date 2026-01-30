@@ -1,0 +1,64 @@
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/registration.css') }}" >
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <title>Registration Page</title>
+</head>
+<body>
+    <div class="container">
+        <div class="title">Registation</div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages%}
+                    <p class="{{category}}"> {{ message}} </p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+
+
+        <form method="post">
+            <div class="user_details">
+                <div class="input_pox">
+                    <span class="datails">First Name</span>
+                    <input type="text" id="first_name" name="first_name" placeholder="Enter your First name" value="{{ first_name|default('') }}">
+                </div>
+                <div class="input_pox">
+                    <span class="datails">Last Name</span>
+                    <input type="text" id="last_name" name="last_name" placeholder="Enter your Last Name" >
+                </div>
+                <div class="input_pox">
+                    <span class="datails">Email</span>
+                    <input type="text" id="email" name="email" placeholder="Enter your Email" >
+                </div>
+                <div class="input_pox">
+                    <span class="datails">Phone Number</span>
+                    <input type="text" id="phone_number" name="phone_number" placeholder="Enter your Phone" >
+                </div>
+                <div class="input_pox">
+                    <span class="datails">Password</span>
+                    <div class="password-wrapper">
+                        <input type="password" id="password" name="password" placeholder="Enter your Password" > 
+                        <i class="fa fa-eye" onclick="togglePassword('password')"></i>
+                    </div>
+                </div>
+                <div class="input_pox">
+                    <span class="datails">Confirm Password</span>
+                    <div class="password-wrapper">
+                        <input type="password" id="confpassword" name="confpassword" placeholder="Confirm your Password" > 
+                        <i class="fa fa-eye" onclick="togglePassword('confpassword')"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="button">
+                <input type="submit" value="Register">
+            </div>
+        </form>
+        <script src="{{ url_for('static', filename='js/registration.js')}}"></script>
+    </div>
+</body>
+</html>
